@@ -21,7 +21,27 @@ def calc_tax(net_income):
             previous_step = step
     return tax
 
-income= {}
-income_sum = sum(income.values())
+
+def income_add(key, values):
+    income.update({key: values})
+
+    total_income = sum(income.values())
+    income_list = len(income.keys())
+
+    return total_income, income_list
+
+
+def deduct_add(key, values):
+    deduct.update({key: values})
+
+    total_deduct = sum(deduct.values())
+    deduct_list = len(deduct.keys())
+
+    return total_deduct, deduct_list
+
+income = {}
+income_list = 0
+income_sum = 0
 deduct = {}
-diduct_sum = sum(diduct.values())
+deduct_list = 0
+deduct_sum = 0
