@@ -2,7 +2,7 @@ from tkinter import*
 #ตัวขนาด
 mywin=Tk()
 mywin.title('Tax Calculate')
-mywin.minsize(700,500)
+mywin.minsize(700,520)
 #หัวข้อ
 c1=Label(mywin,
          text='Calculate Tax',
@@ -101,14 +101,16 @@ c01=Label(mywin,
           text='Income',
           fg='blue')
 c01.grid(column=3,
-         row=2,
-         padx=(0,100),
+         row=1,
+         padx=(0,140),
          pady=0)
 lb1=Listbox(mywin,
+            bg='light cyan',
             width=30,
-            height=3)#หาวิธีแสดงข้อมูล
+            height=5)#หาวิธีแสดงข้อมูล
 lb1.grid(column=3,
-         row=3,
+         row=2,
+         rowspan=2,
          padx=30,
          pady=0)
 
@@ -117,31 +119,40 @@ c02=Label(mywin,
           text='Diduct',
           fg='blue')
 c02.grid(column=3,
-         row=5,
-         padx=30,
+         row=4,
+         padx=(0,140),
          pady=0)
 lb2=Listbox(mywin,
+            bg='light cyan',
             width=30,
-            height=3)#หาวิธีแสดงข้อมูล
+            height=5)#หาวิธีแสดงข้อมูล
 lb2.grid(column=3,
-         row=6,
+         row=5,
+         rowspan=2,
          padx=30,
          pady=0)
 
+#เส้นกั้น
+li=Label(mywin,
+          text='------------------------------------------------------------------------------------------------------------------------------------------------------')
+li.grid(column=0,
+        row=8,
+        columnspan=4)
 #ช่องlog
 c00=Label(mywin,
           text='Log',
           fg='blue',
           font='Helvetic 13')
 c00.grid(column=0,
-         row=8,
+         row=9,
          padx=0,
          pady=0)
 lb0=Listbox(mywin,
+            bg='light cyan',
             width=120,
             height=6)#หาวิธีแสดงข้อมูล
 lb0.grid(column=0,
-         row=9,
+         row=10,
          columnspan=4,
          padx=30,
          pady=0)
