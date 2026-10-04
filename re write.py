@@ -24,7 +24,15 @@ def read_tax_rate():
 def rewrite_listbox(listbox, data):
     listbox.delete(0, END)
     for name, value in data.items():
-        listbox.insert(END, f"{name} : {value}")
+        listbox.insert(END, f"{name} : {value:,}")
+
+def delete_list(listbox, dict, item_type):
+    selected_list = listbox.curselection()
+    deleted_key = list(dict)[selected_list[0]]
+    del dict[deleted_key]
+
+    rewrite_listbox(listbox, dict)
+    log_LB.insert(END, f"ลบรายการ{item_type}: {deleted_key}")
 
 #รับค่า income แล้วเพิ่มเข้า listbox
 def income_add():
@@ -42,7 +50,7 @@ def income_add():
             rewrite_listbox(income_LB, income)
             income_name_entry.delete(0, END)
             income_value_entry.delete(0, END)
-            log_LB.insert(END, f"เพิ่มรายได้ {name} : {amount}")
+            log_LB.insert(END, f"เพิ่มรายได้ {name} : {amount:,}")
 
 
 def deduct_add():
@@ -60,7 +68,7 @@ def deduct_add():
             rewrite_listbox(deduct_LB, deduct)
             deduct_name_entry.delete(0, END)
             deduct_value_entry.delete(0, END)
-            log_LB.insert(END, f"เพิ่มส่วนลด/ค่าใช้จ่าย {name} : {amount}")
+            log_LB.insert(END, f"เพิ่มส่วนลด/ค่าใช้จ่าย {name} : {amount:,}")
 
 
 def calc_tax():
@@ -80,7 +88,7 @@ def calc_tax():
             sum_tax += (step - previous_step) * rate
             previous_step = step
 
-    log_LB.insert(END, f"รายได้ {total_income}, ค่าใช้จ่าย/ส่วนลดหย่อน {total_deduct}, รายได้สุทธิ {net_income}, ภาษีที่ต้องจ่าย {sum_tax}")
+    log_LB.insert(END,f"รายได้ {total_income:,},ค่าใช้จ่าย/ส่วนลดหย่อน {total_deduct:,},รายได้สุทธิ {net_income:,},ภาษีที่ต้องจ่าย {sum_tax:,}",)
     show_result(net_income, sum_tax)
 
 
@@ -101,9 +109,9 @@ def show_result(net_income, sum_tax):
     result_deduct_LB.place(width=200, height=180, x=270, y=45)
     rewrite_listbox(result_deduct_LB, deduct)
 
-    net_income_label = Label(result_win, text=f"รายได้สุทธิ : {net_income}", fg="blue", font=("arial", 12))
+    net_income_label = Label(result_win, text=f"รายได้สุทธิ : {net_income:,}", fg="blue", font=("arial", 12))
     net_income_label.place(x=30, y=250)
-    sum_tax_label = Label(result_win, text=f"ภาษีที่ต้องจ่าย : {sum_tax}", fg="blue", font=("arial", 12))
+    sum_tax_label = Label(result_win, text=f"ภาษีที่ต้องจ่าย : {sum_tax:,}", fg="blue", font=("arial", 12))
     sum_tax_label.place(x=30, y=285)
 
     save_button = Button(result_win, text="บันทึกผล", fg="green", font=("arial", 12), command=save_result)
@@ -191,10 +199,14 @@ if __name__ == "__main__":
     income_LB_label = Label(main_window, text="income", fg="blue", font=("arial", 10)).place(x=580, y=30)
     income_LB = Listbox(main_window)
     income_LB.place(x=580, y=70, width=150, height=100)
+    income_delete_button = Button(main_window,text="ลบรายได้",command=lambda: delete_list(income_LB, income, "รายได้"))
+    income_delete_button.place(x=605, y=175, width=100)
 
-    deduct_LB_label = Label(main_window, text="deduct and expense", fg="blue", font=("arial", 10)).place(x=580, y=180)
+    deduct_LB_label = Label(main_window, text="deduct and expense", fg="blue", font=("arial", 10)).place(x=580, y=210)
     deduct_LB = Listbox(main_window)
-    deduct_LB.place(x=580, y=220, width=150, height=100)
+    deduct_LB.place(x=580, y=245, width=150, height=100)
+    deduct_delete_button = Button(main_window,text="ลบรายการ",command=lambda: delete_list(deduct_LB, deduct, "ส่วนลด/ค่าใช้จ่าย"))
+    deduct_delete_button.place(x=605, y=350, width=100)
 
     log_LB_Label = Label(main_window, text="Log", fg="blue", font=("arial", 12)).place(x=30, y=315)
     log_LB = Listbox(main_window)
