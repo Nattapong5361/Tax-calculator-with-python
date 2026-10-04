@@ -1,12 +1,12 @@
 from tkinter import *
 import tkinter.filedialog
 import csv
-import os
+from pathlib import Path
 #อัตตราภาษี
 #เรียกใช้ไฟล์ csv ที่เก็บอัตราภาษี
 def read_tax_rate():
-    csv_path = os.path.join(os.path.dirname(__file__), "Tax rates.csv")
-    with open(csv_path, "r", encoding="utf-8") as file:
+    csv_path = Path(__file__).with_name("Tax rates.csv")
+    with csv_path.open("r", encoding="utf-8") as file:
         csvreader = csv.reader(file)
         unconvert_tax = list(csvreader)
         tax_rate = []
@@ -79,9 +79,8 @@ def save_result():
     if not filename:   #ไว้ใช้ตอน user กด cancel
         lb0.insert(END, "ยกเลิกการบันทึกไฟล์")
     else:
-        with open(filename, mode='w', encoding='utf-8', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(['type', 'name', 'value'])
+        with open(filename,mode='w', encoding='utf-8') as file:
+            writer = csv.writer(file,lineterminator="\n")
             for name, value in income.items():
                 writer.writerow(['income', name, value])
             for name, value in deduct.items():
@@ -92,18 +91,20 @@ def save_result():
 def import_file():
     filename = tkinter.filedialog.askopenfilename(filetypes=[('CSV files', '*.csv')])
     if filename:
-        with open(filename, mode='r', encoding='utf-8', newline='') as file:
+        with open(filename,mode='r', encoding='utf-8') as file:
             rows = list(csv.reader(file))
 
         income.clear()
         deduct.clear()
+        
         for row in rows:
-            if len(row) < 3 or row[0] == 'type':
-                continue
-            kind, name, value = row[0], row[1], row[2]
-            if kind == 'income':
+            type = row[0]
+            name = row[1]
+            value = row[2]
+            
+            if type == 'income':
                 income[name] = float(value)
-            elif kind == 'deduct':
+            elif type == 'deduct':
                 deduct[name] = float(value)
 
         add_dict(lb1, income)
